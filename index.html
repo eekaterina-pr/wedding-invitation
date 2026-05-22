@@ -107,21 +107,6 @@ color:white;
 transform:translateY(-2px);
 }
 
-/* ===== FADE ===== */
-.fade{
-position:fixed;
-inset:0;
-background:#f7f3ee;
-opacity:0;
-pointer-events:none;
-transition:1.5s ease;
-z-index:10;
-}
-
-.fade.active{
-opacity:1;
-}
-
 /* ===== HERO ===== */
 .hero{
 min-height:100vh;
@@ -170,6 +155,63 @@ from{opacity:0;transform:translateY(20px)}
 to{opacity:1;transform:translateY(0)}
 }
 
+/* ===== PEARL TIMER ===== */
+.timer{
+display:flex;
+gap:18px;
+justify-content:center;
+margin-top:60px;
+flex-wrap:wrap;
+}
+
+.pearl{
+width:110px;
+height:110px;
+border-radius:50%;
+background:radial-gradient(circle at 30% 30%, #ffffff, #e8ddd2);
+box-shadow:
+0 10px 30px rgba(0,0,0,0.12),
+inset 0 0 20px rgba(255,255,255,0.6);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+position:relative;
+animation:glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow{
+0%{transform:translateY(0px)}
+100%{transform:translateY(-4px)}
+}
+
+.pearl span{
+font-size:22px;
+font-weight:500;
+font-family:"Cormorant Garamond";
+}
+
+.pearl small{
+font-size:12px;
+opacity:0.7;
+letter-spacing:1px;
+}
+
+/* FADE */
+.fade{
+position:fixed;
+inset:0;
+background:#f7f3ee;
+opacity:0;
+pointer-events:none;
+transition:1.5s ease;
+z-index:10;
+}
+
+.fade.active{
+opacity:1;
+}
+
 </style>
 </head>
 
@@ -203,6 +245,10 @@ to{opacity:1;transform:translateY(0)}
 <div class="meta">
 7 августа 2026 • 16:00 • Челябинск • Бродоколмакский тракт 3/3
 </div>
+
+<!-- PEARL TIMER -->
+<div class="timer" id="timer"></div>
+
 </section>
 
 <div class="fade" id="fade"></div>
@@ -220,6 +266,27 @@ document.getElementById("fade").classList.remove("active");
 document.getElementById("hero").scrollIntoView({behavior:"smooth"});
 },1200);
 }
+
+// countdown
+function updateTimer(){
+
+const target = new Date("2026-08-07T16:00:00");
+const now = new Date();
+const diff = target - now;
+
+const days = Math.floor(diff / (1000*60*60*24));
+const hours = Math.floor(diff / (1000*60*60)) % 24;
+const minutes = Math.floor(diff / (1000*60)) % 60;
+
+document.getElementById("timer").innerHTML = `
+<div class="pearl"><span>${days}</span><small>days</small></div>
+<div class="pearl"><span>${hours}</span><small>hours</small></div>
+<div class="pearl"><span>${minutes}</span><small>min</small></div>
+`;
+}
+
+setInterval(updateTimer,1000);
+updateTimer();
 
 </script>
 
