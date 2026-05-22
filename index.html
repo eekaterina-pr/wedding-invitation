@@ -10,6 +10,7 @@
 
 <style>
 
+/* ================= GLOBAL ================= */
 body{
 margin:0;
 font-family:Manrope;
@@ -18,25 +19,26 @@ overflow-x:hidden;
 color:#111;
 }
 
-/* ===== BACKGROUND ===== */
+/* CINEMATIC LIGHT BACKGROUND */
 .bg{
 position:fixed;
 inset:0;
 background:
-radial-gradient(circle at 20% 20%, #fff 0%, transparent 40%),
-radial-gradient(circle at 80% 60%, #efe3d6 0%, transparent 45%),
+radial-gradient(circle at 15% 20%, rgba(255,255,255,0.9), transparent 40%),
+radial-gradient(circle at 85% 60%, rgba(198,167,125,0.18), transparent 45%),
+radial-gradient(circle at 50% 80%, rgba(255,255,255,0.6), transparent 60%),
 linear-gradient(180deg,#f7f3ee,#f2ebe2);
-animation:floatBg 12s ease-in-out infinite alternate;
+animation:lightMove 12s ease-in-out infinite alternate;
 z-index:0;
 }
 
-@keyframes floatBg{
-0%{transform:scale(1)}
-100%{transform:scale(1.05)}
+@keyframes lightMove{
+0%{transform:scale(1) rotate(0deg)}
+100%{transform:scale(1.08) rotate(1deg)}
 }
 
-/* ===== ENVELOPE ===== */
-.center{
+/* ================= ENVELOPE ================= */
+.cover{
 height:100vh;
 display:flex;
 align-items:center;
@@ -47,20 +49,21 @@ z-index:2;
 }
 
 .envelope{
-width:340px;
+width:360px;
 height:220px;
 position:relative;
-cursor:pointer;
-}
-
-.body{
-width:100%;
-height:100%;
 background:rgba(255,255,255,0.55);
-backdrop-filter:blur(12px);
+backdrop-filter:blur(14px);
 border-radius:18px;
 border:1px solid rgba(198,167,125,0.25);
-box-shadow:0 30px 80px rgba(0,0,0,0.12);
+box-shadow:0 40px 120px rgba(0,0,0,0.15);
+overflow:hidden;
+animation:floatIn 1.8s ease;
+}
+
+@keyframes floatIn{
+from{opacity:0;transform:translateY(40px)}
+to{opacity:1;transform:translateY(0)}
 }
 
 .flap{
@@ -68,7 +71,7 @@ position:absolute;
 top:0;
 width:100%;
 height:120px;
-background:rgba(230,220,210,0.9);
+background:linear-gradient(135deg,#e9dfd4,#d8c7b3);
 clip-path:polygon(0 0,100% 0,50% 60%);
 transform-origin:top;
 transition:1.2s ease;
@@ -80,10 +83,41 @@ top:55%;
 width:100%;
 text-align:center;
 font-family:"Cormorant Garamond";
-font-size:24px;
+font-size:22px;
+letter-spacing:1px;
 }
 
-/* ===== HERO ===== */
+.btn{
+margin-top:20px;
+padding:12px 28px;
+border-radius:999px;
+border:1px solid #C6A77D;
+background:rgba(255,255,255,0.4);
+backdrop-filter:blur(10px);
+cursor:pointer;
+transition:.4s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+background:#C6A77D;
+color:#fff;
+}
+
+/* FADE TRANSITION */
+.fade{
+position:fixed;
+inset:0;
+background:#f7f3ee;
+opacity:0;
+pointer-events:none;
+transition:1.2s ease;
+z-index:10;
+}
+
+.fade.active{opacity:1}
+
+/* ================= HERO ================= */
 .hero{
 min-height:100vh;
 display:flex;
@@ -92,48 +126,60 @@ align-items:center;
 justify-content:center;
 text-align:center;
 padding:120px 20px;
+position:relative;
+z-index:1;
 }
 
 .hero h1{
 font-family:"Cormorant Garamond";
-font-size:72px;
+font-size:78px;
 font-weight:300;
 margin:0;
+letter-spacing:2px;
+opacity:0;
+animation:fadeUp 1.6s ease forwards;
+animation-delay:1s;
+}
+
+.hero p{
+max-width:650px;
+margin-top:20px;
+line-height:1.8;
+opacity:0;
+animation:fadeUp 1.6s ease forwards;
+animation-delay:1.4s;
 }
 
 .meta{
-margin-top:20px;
+margin-top:30px;
 color:#C6A77D;
+font-size:18px;
+opacity:0;
+animation:fadeUp 1.6s ease forwards;
+animation-delay:1.8s;
 }
 
-/* ===== TIMELINE ===== */
-.timeline-section{
-padding:120px 20px;
-max-width:900px;
-margin:auto;
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(25px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+/* ================= TIMELINE ================= */
+.timeline{
+max-width:750px;
+margin:80px auto;
+padding:0 20px;
+border-left:2px solid rgba(198,167,125,0.6);
 position:relative;
+z-index:1;
 }
 
-/* vertical line */
-.line{
-position:absolute;
-left:50%;
-top:0;
-bottom:0;
-width:2px;
-background:linear-gradient(#C6A77D,#e8ddd2);
-transform:translateX(-50%);
-}
-
-/* item */
 .item{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin:80px 0;
+margin:50px 0;
+padding-left:25px;
 position:relative;
 opacity:0;
-transform:translateY(40px);
+transform:translateY(30px);
 transition:1s ease;
 }
 
@@ -142,48 +188,97 @@ opacity:1;
 transform:translateY(0);
 }
 
-/* pearl */
-.pearl{
-width:18px;
-height:18px;
-border-radius:50%;
+.item:before{
+content:"";
+width:12px;
+height:12px;
 background:radial-gradient(circle,#fff,#e8ddd2);
-box-shadow:0 5px 15px rgba(0,0,0,0.15);
+border:1px solid #C6A77D;
+border-radius:50%;
 position:absolute;
-left:50%;
-transform:translateX(-50%);
+left:-7px;
+top:6px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* text blocks */
-.time{
-width:40%;
-text-align:right;
-font-weight:500;
+/* ================= RSVP ================= */
+.rsvp{
+display:flex;
+justify-content:center;
+padding:100px 20px;
+position:relative;
+z-index:1;
 }
 
-.desc{
-width:40%;
-text-align:left;
-opacity:0.8;
+.glass{
+width:100%;
+max-width:540px;
+padding:35px;
+border-radius:26px;
+background:rgba(255,255,255,0.55);
+backdrop-filter:blur(18px);
+border:1px solid rgba(198,167,125,0.25);
+box-shadow:0 40px 120px rgba(0,0,0,0.12);
 }
 
-/* alternating sides */
-.item:nth-child(even) .time{
-order:2;
-text-align:left;
+input,textarea{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:12px;
+border:1px solid rgba(0,0,0,0.1);
+background:rgba(255,255,255,0.6);
+outline:none;
+font-family:Manrope;
 }
 
-.item:nth-child(even) .desc{
-text-align:right;
+input:focus,textarea:focus{
+border-color:#C6A77D;
+box-shadow:0 0 0 2px rgba(198,167,125,0.2);
 }
 
-/* fade */
-.fade{
-position:fixed;
-inset:0;
-background:#f7f3ee;
-opacity:0;
-pointer-events:none;
+.btn-row{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:12px;
+}
+
+.select{
+flex:1;
+padding:10px;
+border-radius:999px;
+border:1px solid #C6A77D;
+text-align:center;
+cursor:pointer;
+transition:.3s;
+}
+
+.select.active{
+background:#C6A77D;
+color:#fff;
+}
+
+/* ================= MAP ================= */
+.map{
+text-align:center;
+padding:80px 20px;
+}
+
+.map a{
+display:inline-block;
+margin-top:15px;
+padding:12px 24px;
+border-radius:999px;
+border:1px solid #C6A77D;
+text-decoration:none;
+color:#111;
+transition:.3s;
+}
+
+.map a:hover{
+background:#C6A77D;
+color:#fff;
 }
 
 </style>
@@ -193,67 +288,142 @@ pointer-events:none;
 
 <div class="bg"></div>
 
-<!-- HERO (short version) -->
-<section class="hero">
+<!-- ENVELOPE -->
+<div class="cover" id="cover">
+
+<div class="envelope">
+<div class="flap" id="flap"></div>
+<div class="title">Приглашение на свадьбу</div>
+
+<div style="position:absolute;bottom:20px;width:100%;text-align:center;">
+<button class="btn" onclick="openSite()">Открыть</button>
+</div>
+
+</div>
+
+</div>
+
+<div class="fade" id="fade"></div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
 <h1>Денис & Екатерина</h1>
-<div class="meta">7 августа 2026 • Челябинск</div>
+
+<p>
+Если вы получили это приглашение — значит вы человек, который нам важен и дорог.
+Мы будем рады разделить с вами день создания нашей семьи.
+</p>
+
+<div class="meta">
+7 августа 2026 • 16:00 • Челябинск • Бродоколмакский тракт 3/3
+</div>
 </section>
 
 <!-- TIMELINE -->
-<section class="timeline-section">
+<div class="timeline" id="timeline">
 
-<div class="line"></div>
+<div class="item">16:00 — Сбор гостей</div>
+<div class="item">17:00 — Выездная церемония</div>
+<div class="item">18:00 — Банкет</div>
+<div class="item">21:00 — Свадебный торт</div>
+<div class="item">22:00 — Танцы</div>
 
-<div class="item">
-<div class="time">16:00</div>
-<div class="pearl"></div>
-<div class="desc">Сбор гостей, фуршет</div>
 </div>
 
-<div class="item">
-<div class="time">17:00</div>
-<div class="pearl"></div>
-<div class="desc">Выездная церемония</div>
+<!-- MAP -->
+<div class="map">
+<h2 style="font-family:Cormorant Garamond;">Место проведения</h2>
+<p>Весёлая бухта, Бродоколмакский тракт 3/3</p>
+<a href="https://yandex.ru/maps" target="_blank">Открыть маршрут</a>
 </div>
 
-<div class="item">
-<div class="time">18:00</div>
-<div class="pearl"></div>
-<div class="desc">Начало банкета</div>
+<!-- RSVP -->
+<div class="rsvp">
+
+<div class="glass">
+
+<h2 style="font-family:Cormorant Garamond;text-align:center;">RSVP</h2>
+
+<input placeholder="Имя Фамилия">
+<input placeholder="Телефон">
+
+<p>Вы будете:</p>
+<div class="btn-row">
+<div class="select" onclick="choose(this,'alone')">Один(на)</div>
+<div class="select" onclick="choose(this,'couple')">С парой</div>
 </div>
 
-<div class="item">
-<div class="time">21:00</div>
-<div class="pearl"></div>
-<div class="desc">Свадебный торт</div>
+<div id="partner" style="display:none;">
+<input placeholder="Имя спутника">
 </div>
 
-<div class="item">
-<div class="time">22:00</div>
-<div class="pearl"></div>
-<div class="desc">Танцы и завершение вечера</div>
+<p>Меню:</p>
+<div class="btn-row">
+<div class="select" onclick="menu(this)">Мясо</div>
+<div class="select" onclick="menu(this)">Рыба</div>
+<div class="select" onclick="menu(this)">Veg</div>
 </div>
 
-</section>
+<textarea placeholder="Аллергии / комментарии"></textarea>
+
+<div class="btn" style="margin-top:20px;text-align:center;" onclick="submitForm()">Отправить</div>
+
+</div>
+
+</div>
 
 <script>
 
-// scroll animation
-const items = document.querySelectorAll(".item");
+/* OPEN ENVELOPE */
+function openSite(){
+document.getElementById("flap").style.transform="rotateX(180deg)";
+document.getElementById("fade").classList.add("active");
+
+setTimeout(()=>{
+document.getElementById("cover").style.display="none";
+document.getElementById("fade").classList.remove("active");
+document.getElementById("hero").scrollIntoView({behavior:"smooth"});
+},1200);
+}
+
+/* TIMELINE ANIMATION */
+const items=document.querySelectorAll(".item");
 
 function reveal(){
-items.forEach(el=>{
-const top = el.getBoundingClientRect().top;
-if(top < window.innerHeight - 100){
-el.classList.add("visible");
+items.forEach(i=>{
+if(i.getBoundingClientRect().top < window.innerHeight-80){
+i.classList.add("visible");
 }
 });
 }
-
 window.addEventListener("scroll",reveal);
 reveal();
+
+/* RSVP */
+let type="alone";
+
+function choose(el,val){
+document.querySelectorAll(".select").forEach(b=>b.classList.remove("active"));
+el.classList.add("active");
+
+if(val==="couple"){
+document.getElementById("partner").style.display="block";
+}else{
+document.getElementById("partner").style.display="none";
+}
+}
+
+function menu(el){
+document.querySelectorAll(".btn-row")[1].querySelectorAll(".select")
+.forEach(b=>b.classList.remove("active"));
+el.classList.add("active");
+}
+
+function submitForm(){
+alert("Спасибо! Ваш ответ сохранён 💍");
+}
 
 </script>
 
 </body>
-</html> 
+</html>
