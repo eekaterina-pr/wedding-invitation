@@ -1,309 +1,163 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Wedding Invitation</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
+
 body{
 margin:0;
-font-family:Manrope, sans-serif;
-background:#F7F3EE;
-color:#111;
-overflow-x:hidden;
-}
-
-h1,h2{
-font-family:"Cormorant Garamond", serif;
-font-weight:400;
-}
-
-section{
-padding:80px 20px;
-max-width:1000px;
-margin:auto;
-}
-
-/* ENVELOPE */
-#cover{
-height:100vh;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-background:radial-gradient(circle,#fff,#f3ede6);
-text-align:center;
-}
-
-.envelope{
-width:320px;
-height:200px;
-background:#efe7de;
-border-radius:16px;
-box-shadow:0 30px 80px rgba(0,0,0,.15);
-position:relative;
-margin-bottom:30px;
-}
-
-.envelope:before{
-content:"";
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#e6ddd2;
-clip-path:polygon(0 0,100% 0,50% 55%);
-}
-
-button{
-padding:12px 28px;
-border-radius:999px;
-border:1px solid #C6A77D;
-background:transparent;
-cursor:pointer;
-transition:.3s;
-}
-
-button:hover{
-background:#C6A77D;
-color:#fff;
-}
-
-/* HERO */
-.hero{
-text-align:center;
-padding-top:120px;
-}
-
-.hero h1{
-font-size:64px;
-margin-bottom:10px;
-}
-
-.date{
-color:#C6A77D;
-font-size:20px;
-margin-top:20px;
-}
-
-/* PEARLS */
-.pearl-box{
-display:flex;
-justify-content:center;
-gap:20px;
-flex-wrap:wrap;
-margin-top:40px;
-}
-
-.pearl{
-width:90px;
-height:90px;
-border-radius:50%;
-background:radial-gradient(circle,#fff,#e8ddd2);
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-box-shadow:0 10px 25px rgba(0,0,0,.1);
-}
-
-/* TIMELINE */
-.timeline{
-margin-top:80px;
-border-left:2px solid #C6A77D;
-padding-left:20px;
-}
-
-.item{
-margin-bottom:30px;
-position:relative;
-}
-
-.item:before{
-content:"";
-width:12px;
-height:12px;
-background:#C6A77D;
-border-radius:50%;
-position:absolute;
-left:-28px;
-top:5px;
-}
-
-/* DRESS CODE */
-.cards{
-display:flex;
-gap:20px;
-justify-content:center;
-margin-top:40px;
-flex-wrap:wrap;
-}
-
-.card{
-padding:20px;
-border-radius:20px;
-background:rgba(255,255,255,.5);
-backdrop-filter:blur(10px);
-border:1px solid rgba(198,167,125,.3);
-cursor:pointer;
-}
-
-/* RSVP */
-form{
-display:flex;
-flex-direction:column;
-gap:12px;
-max-width:500px;
-margin:auto;
-}
-
-input, textarea{
-padding:12px;
-border-radius:10px;
-border:1px solid #ddd;
+overflow:hidden;
+background:#f7f3ee;
 font-family:Manrope;
 }
 
-.submit{
-background:#C6A77D;
-color:#fff;
-border:none;
+/* BACKGROUND LAYERS */
+.bg{
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at 20% 20%, #ffffff 0%, transparent 40%),
+radial-gradient(circle at 80% 60%, #efe3d6 0%, transparent 45%),
+linear-gradient(180deg,#f7f3ee,#f2ebe2);
+filter:blur(0px);
+animation:slowMove 12s ease-in-out infinite alternate;
 }
 
-/* MODAL */
-.modal{
-position:fixed;
+@keyframes slowMove{
+0%{transform:scale(1)}
+100%{transform:scale(1.05)}
+}
+
+/* ENVELOPE */
+.center{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+position:relative;
+z-index:2;
+}
+
+.envelope{
+width:340px;
+height:220px;
+position:relative;
+cursor:pointer;
+transform:translateY(30px);
+opacity:0;
+animation:appear 2s ease forwards;
+}
+
+@keyframes appear{
+to{opacity:1;transform:translateY(0)}
+}
+
+.body{
+width:100%;
+height:100%;
+background:rgba(255,255,255,0.6);
+backdrop-filter:blur(12px);
+border-radius:18px;
+border:1px solid rgba(198,167,125,0.25);
+box-shadow:0 30px 80px rgba(0,0,0,0.12);
+}
+
+/* FLAP */
+.flap{
+position:absolute;
 top:0;
 left:0;
 width:100%;
-height:100%;
-background:rgba(0,0,0,.5);
-display:none;
-align-items:center;
-justify-content:center;
+height:120px;
+background:rgba(230,220,210,0.9);
+clip-path:polygon(0 0,100% 0,50% 60%);
+transform-origin:top;
+transition:1.2s ease;
 }
 
-.modal-content{
-background:#fff;
-padding:30px;
-border-radius:20px;
-max-width:400px;
+/* TEXT */
+.title{
+margin-top:30px;
 text-align:center;
+font-family:"Cormorant Garamond";
+font-size:26px;
+letter-spacing:1px;
+color:#111;
 }
+
+.btn{
+margin-top:20px;
+padding:12px 28px;
+border-radius:999px;
+border:1px solid #C6A77D;
+background:rgba(255,255,255,0.3);
+backdrop-filter:blur(10px);
+cursor:pointer;
+transition:.4s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+background:#C6A77D;
+color:white;
+}
+
+.fade{
+position:fixed;
+inset:0;
+background:#f7f3ee;
+opacity:0;
+pointer-events:none;
+transition:1.5s ease;
+}
+
+.fade.active{
+opacity:1;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- COVER -->
-<div id="cover">
-<div class="envelope"></div>
-<h2>Приглашение на свадьбу</h2>
-<button onclick="openSite()">Открыть</button>
+<div class="bg"></div>
+
+<div class="center">
+
+<div class="envelope" id="env">
+<div class="flap" id="flap"></div>
+<div class="body"></div>
+
+<div style="position:absolute;top:55%;width:100%;text-align:center;">
+<div class="title">Приглашение на свадьбу</div>
+<button class="btn" onclick="openInvite()">Открыть</button>
 </div>
 
-<!-- HERO -->
-<section class="hero" id="main">
-<h1>Денис & Екатерина</h1>
-<p>Мы будем рады разделить с вами день создания нашей семьи</p>
-
-<div class="date">
-7 августа 2026 • 16:00 • Челябинск
 </div>
 
-<div class="pearl-box" id="timer"></div>
-</section>
-
-<!-- TIMELINE -->
-<section>
-<h2>Тайминг дня</h2>
-
-<div class="timeline">
-<div class="item">16:00 — Сбор гостей</div>
-<div class="item">17:00 — Церемония</div>
-<div class="item">18:00 — Банкет</div>
-<div class="item">21:00 — Торт</div>
-<div class="item">22:00 — Танцы</div>
 </div>
-</section>
 
-<!-- DRESS CODE -->
-<section>
-<h2>Дресс-код</h2>
-
-<div class="cards">
-<div class="card" onclick="openModal('women')">👗 Women</div>
-<div class="card" onclick="openModal('men')">🤵 Men</div>
-</div>
-</section>
-
-<!-- RSVP -->
-<section>
-<h2>RSVP</h2>
-
-<form onsubmit="saveForm(event)">
-<input placeholder="Имя Фамилия" required>
-<input placeholder="Телефон" required>
-<textarea placeholder="Меню / аллергии"></textarea>
-<button class="submit">Отправить</button>
-</form>
-</section>
-
-<!-- MODAL -->
-<div class="modal" id="modal" onclick="closeModal()">
-<div class="modal-content" id="modalText"></div>
-</div>
+<div class="fade" id="fade"></div>
 
 <script>
 
-// smooth entrance
-function openSite(){
-document.getElementById("cover").style.display="none";
-}
+function openInvite(){
 
-// countdown pearls (simple)
-function updateTimer(){
-const target = new Date("2026-08-07T16:00:00");
-const now = new Date();
-const diff = target - now;
+// flap animation
+document.getElementById("flap").style.transform = "rotateX(180deg)";
 
-const days = Math.floor(diff / (1000*60*60*24));
-const hours = Math.floor(diff / (1000*60*60)) % 24;
-const minutes = Math.floor(diff / (1000*60)) % 60;
+// cinematic fade
+document.getElementById("fade").classList.add("active");
 
-document.getElementById("timer").innerHTML = `
-<div class="pearl">${days}<br><small>days</small></div>
-<div class="pearl">${hours}<br><small>hours</small></div>
-<div class="pearl">${minutes}<br><small>min</small></div>
-`;
-}
-
-setInterval(updateTimer,1000);
-updateTimer();
-
-// modal
-function openModal(type){
-document.getElementById("modal").style.display="flex";
-
-document.getElementById("modalText").innerHTML =
-type==="women"
-? "Дамы: избегайте белых платьев и спортивного стиля"
-: "Мужчины: избегайте спортивной и повседневной одежды";
-}
-
-function closeModal(){
-document.getElementById("modal").style.display="none";
-}
-
-// fake save
-function saveForm(e){
-e.preventDefault();
-alert("Спасибо! Ответ сохранён 💍");
+// redirect to main after animation
+setTimeout(()=>{
+window.location.href = "#hero";
+},1400);
 }
 
 </script>
