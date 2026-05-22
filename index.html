@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wedding Invitation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+body{
+margin:0;
+font-family:Manrope, sans-serif;
+background:#F7F3EE;
+color:#111;
+overflow-x:hidden;
+}
+
+h1,h2{
+font-family:"Cormorant Garamond", serif;
+font-weight:400;
+}
+
+section{
+padding:80px 20px;
+max-width:1000px;
+margin:auto;
+}
+
+/* ENVELOPE */
+#cover{
+height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+background:radial-gradient(circle,#fff,#f3ede6);
+text-align:center;
+}
+
+.envelope{
+width:320px;
+height:200px;
+background:#efe7de;
+border-radius:16px;
+box-shadow:0 30px 80px rgba(0,0,0,.15);
+position:relative;
+margin-bottom:30px;
+}
+
+.envelope:before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#e6ddd2;
+clip-path:polygon(0 0,100% 0,50% 55%);
+}
+
+button{
+padding:12px 28px;
+border-radius:999px;
+border:1px solid #C6A77D;
+background:transparent;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#C6A77D;
+color:#fff;
+}
+
+/* HERO */
+.hero{
+text-align:center;
+padding-top:120px;
+}
+
+.hero h1{
+font-size:64px;
+margin-bottom:10px;
+}
+
+.date{
+color:#C6A77D;
+font-size:20px;
+margin-top:20px;
+}
+
+/* PEARLS */
+.pearl-box{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+margin-top:40px;
+}
+
+.pearl{
+width:90px;
+height:90px;
+border-radius:50%;
+background:radial-gradient(circle,#fff,#e8ddd2);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+box-shadow:0 10px 25px rgba(0,0,0,.1);
+}
+
+/* TIMELINE */
+.timeline{
+margin-top:80px;
+border-left:2px solid #C6A77D;
+padding-left:20px;
+}
+
+.item{
+margin-bottom:30px;
+position:relative;
+}
+
+.item:before{
+content:"";
+width:12px;
+height:12px;
+background:#C6A77D;
+border-radius:50%;
+position:absolute;
+left:-28px;
+top:5px;
+}
+
+/* DRESS CODE */
+.cards{
+display:flex;
+gap:20px;
+justify-content:center;
+margin-top:40px;
+flex-wrap:wrap;
+}
+
+.card{
+padding:20px;
+border-radius:20px;
+background:rgba(255,255,255,.5);
+backdrop-filter:blur(10px);
+border:1px solid rgba(198,167,125,.3);
+cursor:pointer;
+}
+
+/* RSVP */
+form{
+display:flex;
+flex-direction:column;
+gap:12px;
+max-width:500px;
+margin:auto;
+}
+
+input, textarea{
+padding:12px;
+border-radius:10px;
+border:1px solid #ddd;
+font-family:Manrope;
+}
+
+.submit{
+background:#C6A77D;
+color:#fff;
+border:none;
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.5);
+display:none;
+align-items:center;
+justify-content:center;
+}
+
+.modal-content{
+background:#fff;
+padding:30px;
+border-radius:20px;
+max-width:400px;
+text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<!-- COVER -->
+<div id="cover">
+<div class="envelope"></div>
+<h2>Приглашение на свадьбу</h2>
+<button onclick="openSite()">Открыть</button>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="main">
+<h1>Денис & Екатерина</h1>
+<p>Мы будем рады разделить с вами день создания нашей семьи</p>
+
+<div class="date">
+7 августа 2026 • 16:00 • Челябинск
+</div>
+
+<div class="pearl-box" id="timer"></div>
+</section>
+
+<!-- TIMELINE -->
+<section>
+<h2>Тайминг дня</h2>
+
+<div class="timeline">
+<div class="item">16:00 — Сбор гостей</div>
+<div class="item">17:00 — Церемония</div>
+<div class="item">18:00 — Банкет</div>
+<div class="item">21:00 — Торт</div>
+<div class="item">22:00 — Танцы</div>
+</div>
+</section>
+
+<!-- DRESS CODE -->
+<section>
+<h2>Дресс-код</h2>
+
+<div class="cards">
+<div class="card" onclick="openModal('women')">👗 Women</div>
+<div class="card" onclick="openModal('men')">🤵 Men</div>
+</div>
+</section>
+
+<!-- RSVP -->
+<section>
+<h2>RSVP</h2>
+
+<form onsubmit="saveForm(event)">
+<input placeholder="Имя Фамилия" required>
+<input placeholder="Телефон" required>
+<textarea placeholder="Меню / аллергии"></textarea>
+<button class="submit">Отправить</button>
+</form>
+</section>
+
+<!-- MODAL -->
+<div class="modal" id="modal" onclick="closeModal()">
+<div class="modal-content" id="modalText"></div>
+</div>
+
+<script>
+
+// smooth entrance
+function openSite(){
+document.getElementById("cover").style.display="none";
+}
+
+// countdown pearls (simple)
+function updateTimer(){
+const target = new Date("2026-08-07T16:00:00");
+const now = new Date();
+const diff = target - now;
+
+const days = Math.floor(diff / (1000*60*60*24));
+const hours = Math.floor(diff / (1000*60*60)) % 24;
+const minutes = Math.floor(diff / (1000*60)) % 60;
+
+document.getElementById("timer").innerHTML = `
+<div class="pearl">${days}<br><small>days</small></div>
+<div class="pearl">${hours}<br><small>hours</small></div>
+<div class="pearl">${minutes}<br><small>min</small></div>
+`;
+}
+
+setInterval(updateTimer,1000);
+updateTimer();
+
+// modal
+function openModal(type){
+document.getElementById("modal").style.display="flex";
+
+document.getElementById("modalText").innerHTML =
+type==="women"
+? "Дамы: избегайте белых платьев и спортивного стиля"
+: "Мужчины: избегайте спортивной и повседневной одежды";
+}
+
+function closeModal(){
+document.getElementById("modal").style.display="none";
+}
+
+// fake save
+function saveForm(e){
+e.preventDefault();
+alert("Спасибо! Ответ сохранён 💍");
+}
+
+</script>
+
+</body>
+</html>
